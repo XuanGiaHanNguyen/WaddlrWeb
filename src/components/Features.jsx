@@ -22,9 +22,9 @@ export default function Features() {
               className={`feature-cell${f.accent ? " accent-cell" : ""}${f.wide ? " wide" : ""}`}
             >
               <div className="feature-icon-wrap">
-                <Icon size={24} color="#fb923c"/>
+                <Icon size={24} color="#fb923c" />
               </div>
-              <div className="feature-title text-[#e8720c]">{f.title}</div>
+              <div className="feature-title" style={{ color: "#e8720c" }}>{f.title}</div>
               <p className="feature-desc">{f.desc}</p>
             </div>
           );
