@@ -74,7 +74,7 @@ export default function Hero() {
       <style>{styles}</style>
       <section className="hero">
         <div className="hero-text">
-          <div className="hero-eyebrow">Women's Safety App</div>
+          <div className="hero-eyebrow">Community Safety Network</div>
           <h1>
             Walk with <em>confidence.</em> Never alone.
           </h1>
@@ -88,7 +88,7 @@ export default function Hero() {
               ⬇ Download Free
             </a>
             <a href="#how" className="btn-secondary">
-              See How It Works →
+               → Become a Safe Host
             </a>
           </div>
           <div className="hero-spacer" />
