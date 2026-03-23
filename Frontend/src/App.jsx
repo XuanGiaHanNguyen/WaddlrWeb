@@ -2,7 +2,7 @@ import "./index.css";
 import { Routes, Route } from "react-router";
 
 import Landing from "./pages/Landing";
-import Process from "./pages/Process";
+import Process from "./pages/process/Process";
 import Navbar from "./components/Navbar";
 
 function App() {
