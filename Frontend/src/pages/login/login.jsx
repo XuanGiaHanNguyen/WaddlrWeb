@@ -1,5 +1,7 @@
+// src/components/Login.jsx
 import { useState } from "react";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { useAuth } from "../../services/hooks/useauth";
 
 const C = {
   accent: "#e8720c",
@@ -10,6 +12,11 @@ const C = {
 };
 
 export default function Login({ onSwitch }) {
+  const { signIn, loading, error, clearError } = useAuth();
+
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
 
@@ -26,9 +33,19 @@ export default function Login({ onSwitch }) {
     boxShadow: focusedField === field ? `0 0 0 3px rgba(232,114,12,0.1)` : "none",
   });
 
-  return (
-    <div style={{ flex: 1, padding: "2.5rem",  display: "flex", flexDirection: "column", justifyContent: "center" }}>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    clearError();
+    try {
+      await signIn(email, password);
+      // onAuthStateChange in useAuth updates user → App re-renders to dashboard
+    } catch {
+      // error already in context
+    }
+  };
 
+  return (
+    <div style={{ flex: 1, padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
       <div style={{ marginBottom: "1.75rem" }}>
         <div style={{ fontSize: "1.5rem", fontWeight: 600, color: C.deep, marginBottom: "0.25rem" }}>Sign in</div>
         <p style={{ fontSize: "0.85rem", color: C.muted }}>
@@ -38,6 +55,13 @@ export default function Login({ onSwitch }) {
           </button>
         </p>
       </div>
+
+      {/* Error banner */}
+      {error && (
+        <div style={{ marginBottom: "1rem", padding: "0.65rem 0.9rem", borderRadius: "8px", background: "rgba(220,38,38,0.06)", border: "1px solid rgba(220,38,38,0.2)", fontSize: "0.82rem", color: "#dc2626" }}>
+          {error}
+        </div>
+      )}
 
       {/* Google */}
       <button
@@ -55,37 +79,54 @@ export default function Login({ onSwitch }) {
         <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.1)" }} />
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", marginBottom: "0.85rem" }}>
-        <div>
-          <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: C.deep, marginBottom: "0.3rem" }}>Email address</label>
-          <input type="email" placeholder="you@example.com" onFocus={() => setFocusedField("email")} onBlur={() => setFocusedField(null)} style={inputStyle("email")} />
-        </div>
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.3rem" }}>
-            <label style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: C.deep }}>Password</label>
-            <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: "0.78rem", color: C.accent, fontWeight: 500, padding: 0 }}>Forgot?</button>
+      <form onSubmit={handleSubmit} noValidate>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", marginBottom: "0.85rem" }}>
+          <div>
+            <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: C.deep, marginBottom: "0.3rem" }}>Email address</label>
+            <input
+              type="email" placeholder="you@example.com"
+              value={email} onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => setFocusedField("email")} onBlur={() => setFocusedField(null)}
+              style={inputStyle("email")} required
+            />
           </div>
-          <div style={{ position: "relative" }}>
-            <input type={showPass ? "text" : "password"} placeholder="••••••••" onFocus={() => setFocusedField("password")} onBlur={() => setFocusedField(null)} style={{ ...inputStyle("password"), paddingRight: "2.8rem" }} />
-            <button onClick={() => setShowPass(!showPass)} style={{ position: "absolute", right: "0.9rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: C.muted, display: "flex", padding: 0 }}>
-              {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.3rem" }}>
+              <label style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: C.deep }}>Password</label>
+              <button type="button" style={{ background: "none", border: "none", cursor: "pointer", fontSize: "0.78rem", color: C.accent, fontWeight: 500, padding: 0 }}>Forgot?</button>
+            </div>
+            <div style={{ position: "relative" }}>
+              <input
+                type={showPass ? "text" : "password"} placeholder="••••••••"
+                value={password} onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setFocusedField("password")} onBlur={() => setFocusedField(null)}
+                style={{ ...inputStyle("password"), paddingRight: "2.8rem" }} required
+              />
+              <button type="button" onClick={() => setShowPass(!showPass)} style={{ position: "absolute", right: "0.9rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: C.muted, display: "flex", padding: 0 }}>
+                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "1.5rem" }}>
-        <input type="checkbox" style={{ accentColor: C.accent, width: 14, height: 14 }} />
-        <span style={{ fontSize: "0.82rem", color: C.muted }}>Keep me signed in</span>
-      </label>
+        <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "1.5rem" }}>
+          <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} style={{ accentColor: C.accent, width: 14, height: 14 }} />
+          <span style={{ fontSize: "0.82rem", color: C.muted }}>Keep me signed in</span>
+        </label>
 
-      <button
-        style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", background: C.accent, color: C.white, border: "none", fontSize: "0.88rem", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", transition: "opacity 0.15s" }}
-        onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-      >
-        Sign in <ArrowRight size={15} />
-      </button>
+        <button
+          type="submit" disabled={loading}
+          style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", background: C.accent, color: C.white, border: "none", fontSize: "0.88rem", fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", opacity: loading ? 0.7 : 1, transition: "opacity 0.15s" }}
+          onMouseEnter={(e) => { if (!loading) e.currentTarget.style.opacity = "0.88"; }}
+          onMouseLeave={(e) => { if (!loading) e.currentTarget.style.opacity = "1"; }}
+        >
+          {loading
+            ? <span style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
+            : <> Sign in <ArrowRight size={15} /> </>}
+        </button>
+      </form>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
