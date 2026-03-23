@@ -87,7 +87,7 @@ export default function Hero() {
             <a href="#download" className="btn-primary">
               ⬇ Download Free
             </a>
-            <a href="/safehome" className="btn-secondary">
+            <a href="/authenication" className="btn-secondary">
                → Become a Safe Host
             </a>
           </div>
