@@ -10,10 +10,12 @@ const STATS = [
 
 function FloatCard({ icon: Icon, label, value, sub }) {
   return (
-    <div className="bg-white rounded-[14px] shadow-[0_4px_24px_rgba(0,0,0,0.10)] px-[18px] py-[14px] min-w-[200px]">
+    <div className=" px-[18px] py-[14px] min-w-[200px]">
       <div className="flex items-center gap-2 mb-1">
         <Icon size={20} color="#fb923c" className="shrink-0" />
-        <span className="text-[0.85rem] font-normal text-gray-500">{label}</span>
+        <span className="text-[0.85rem] font-normal text-gray-500">
+          {label}
+        </span>
       </div>
       <div className="text-base font-normal">{value}</div>
       <div className="text-[0.85rem] font-normal text-gray-400">{sub}</div>
@@ -30,9 +32,9 @@ export default function Hero() {
           Walk with <em>confidence.</em> Never alone.
         </h1>
         <p className="hero-sub">
-          Waddlr guides you to verified safe houses in seconds, detects crime
-          in your area in real-time, and keeps you connected to the people who
-          care about you.
+          Waddlr guides you to verified safe houses in seconds, detects crime in
+          your area in real-time, and keeps you connected to the people who care
+          about you.
         </p>
         <div className="hero-ctas">
           <a href="#download" className="btn-primary">

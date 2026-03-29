@@ -120,7 +120,7 @@ export default function PhoneMockup() {
           <div className="absolute inset-0 bg-white flex flex-col font-sans">
 
             {/* Status bar */}
-            <div className="h-7 flex justify-between items-end px-4 pb-[3px] text-[10px] font-semibold text-[#0d2b35] bg-white z-10 shrink-0">
+            <div className="h-7 flex justify-between items-end pb-[3px] text-[10px] font-semibold text-[#0d2b35] bg-white z-10 shrink-0">
               <span>9:41</span>
               <span className="flex gap-1 items-center">
                 <svg width="12" height="10" viewBox="0 0 12 10">

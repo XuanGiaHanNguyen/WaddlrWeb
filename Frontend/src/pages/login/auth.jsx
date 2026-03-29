@@ -4,7 +4,7 @@ import { useAuth } from "../../services/hooks/useauth";
 import Login from "../login/login";
 import SignUp from "../login/signup";
 import Dashboard from "../login/dashboard";
-
+import "../../index.css"
 export default function AuthApp() {
   const { user, loading } = useAuth();
   const [view, setView] = useState("login");
